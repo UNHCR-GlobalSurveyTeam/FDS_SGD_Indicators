@@ -1,11 +1,14 @@
 ---
 title: "Standardized FDS Qv1 2024 SDG Indicator Calculations"
 author: "Global Survey Team"
-output: unhcrdown::html_page
-unhcrdown::html_page:
+output:
+  unhcrdown::html_page:
     toc: true
-    toc_depth: 3
+    toc_depth: 2
     toc_float: true
+editor_options: 
+  markdown: 
+    wrap: sentence
 ---
 
 ```{r setup, include=FALSE}
@@ -17,7 +20,7 @@ Date: Last revision was in February 2025
 
 Github Repo is here: <https://github.com/UNHCR-GlobalSurveyTeam/FDS_SGD_Indicators>
 
-Rmarkdown document is here :<https://rstudio.unhcr.org/FDS-SDG/>
+Rmarkdown document is here :<https://rstudio.unhcr.org/FDS_SDG/>
 
 
 *For any issues please contact Ilgi Bozdag at bozdag@unhcr.org or Petra Kaps at kaps@unhcr.org*
@@ -1848,7 +1851,7 @@ C020201 <- FDS_PAK_2024_RA_caregiver %>%
     mean_value = survey_mean(C020201, vartype = c("ci", "se"), na.rm = TRUE) # Weighted mean with CI and SE
   ) 
 
-# Chart for RBM10202 by population groups
+# Figure by population groups
 ggplot(C020201, aes(x = Intro_07, y = mean_value, fill = Intro_07)) +
   geom_bar(stat = "identity", position = "dodge", width = 0.7) +
   geom_errorbar(aes(ymin = mean_value_low, ymax = mean_value_upp),  # Confidence intervals
@@ -2033,7 +2036,7 @@ C020202b <- FDS_PAK_2024_RA_caregiver %>%
     mean_value = survey_mean(C020202b, vartype = c("ci", "se"), na.rm = TRUE) # Weighted mean with CI and SE
   ) 
 
-# Chart for RBM10202 by population groups
+# Figure by population groups
 ggplot(C020202b, aes(x = Intro_07, y = mean_value, fill = Intro_07)) +
   geom_bar(stat = "identity", position = "dodge", width = 0.7) +
   geom_errorbar(aes(ymin = mean_value_low, ymax = mean_value_upp),  # Confidence intervals
@@ -4992,14 +4995,14 @@ C060102 <- FDS_PAK_2024_main %>%
   filter(!is.na(Intro_07)) %>%     # Exclude if pop groups is NA
   group_by(Intro_07) %>%      # Show results disaggregated by pop groups
   summarise(                                         # put all variables here
-    var_name = "outcome12_1",                          # name of the variable
+    var_name = "C060102",                          # name of the variable
     num_obs_uw = unweighted(n()),                    # unweighted total count
     denominator = survey_total(),                      # weighted total count
     mean_value = survey_mean(C060102, vartype = c("ci", "se"), na.rm = TRUE) # indicator value ( weighted) with CI and SE
   )
 
 
-###Chart of outcome 12_1 by pop groups
+###Chart by pop groups
 
 ggplot(C060102, aes(x = Intro_07, y = mean_value, fill = Intro_07)) +
   geom_bar(stat = "identity", position = "dodge", width = 0.7) +
@@ -5083,7 +5086,7 @@ main <- main %>%
 table(main$C070101)
 ```
 
-## Figure for SDG 7.1.1 by Population Groups
+### Figure for SDG 7.1.1 by Population Groups
 
 ```{r, eval=FALSE}
 
@@ -6686,7 +6689,7 @@ C200204 <- FDS_PAK_2024_RA_adult %>%
   )
 
 
-###Chart of outcome 16.b.1 by pop groups
+###Chart of 16.b.1 by pop groups
 
 ggplot(C200204, aes(x = Intro_07, y = mean_value, fill = Intro_07)) +
   geom_bar(stat = "identity", position = "dodge", width = 0.7) +
@@ -7189,7 +7192,7 @@ HHroster <- HHroster %>%
   ))
 ```
 ```{r, eval=FALSE}
-#Step 3:Create outcome1_2 variable
+#Step 3:Create variable
 HHroster <- HHroster %>%
   mutate(C160901 = case_when(
     (birthRegistered == 1 | birthCertificate == 1) ~ 1,  # Child has been registered or has birth certificate
@@ -7227,7 +7230,7 @@ C160901 <- FDS_PAK_2024_HHroster %>%
   filter(!is.na(Intro_07)) %>%         # Exclude if pop groups is NA
   group_by(Intro_07) %>%                           # Group by pop_groups
   summarise(                                         # Summarise to compute values
-    var_name = "outcome1_2",                          # Name of the variable
+    var_name = "C160901",                          # Name of the variable
     num_obs_uw = unweighted(n()),                    # Unweighted total count
     denominator = survey_total(),                    # Weighted total count
     mean_value = survey_mean(C160901, vartype = c("ci", "se"), na.rm = TRUE)  # Compute mean with NA removed
@@ -7268,7 +7271,7 @@ C160901_AGD <- FDS_PAK_2024_HHroster %>%
   filter(!is.na(HH_02) & !is.na(Intro_07) ) %>%  
   group_by(Intro_07, HH_02) %>%
   summarise(
-    var_name = "outcome1_2",                                      # Name of the variable
+    var_name = "C160901",                                      # Name of the variable
     num_obs_uw = n(),  # Unweighted total count
     denominator = survey_total(),                                # Weighted total count
     mean_value = survey_mean(C160901, vartype = c("ci", "se"), na.rm = TRUE)  # Compute mean with CI and SE
@@ -7387,7 +7390,7 @@ C200204 <- FDS_PAK_2024_RA_adult %>%
   )
 
 
-###Chart of outcome 16.b.1 by pop groups
+###Chart of  16.b.1 by pop groups
 
 ggplot(C200204, aes(x = Intro_07, y = mean_value, fill = Intro_07)) +
   geom_bar(stat = "identity", position = "dodge", width = 0.7) +
@@ -7521,7 +7524,7 @@ C170801 <- FDS_PAK_2024_RA_adult %>%
   )
 
 
-###Chart of outcome 8_2 by pop groups
+###Chart by pop groups
 
 ggplot(C170801, aes(x = Intro_07, y = mean_value, fill = Intro_07)) +
   geom_bar(stat = "identity", position = "dodge", width = 0.7) +
@@ -7577,7 +7580,7 @@ ggplot(C170801_AGD, aes(x = HH_02_RA, y = mean_value, fill = HH_02_RA)) +
   )
 ```
 
-## How to download the final RBM results?
+## How to download the final SDG results?
 
 ```{r, eval=FALSE}
 
