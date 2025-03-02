@@ -1735,8 +1735,6 @@ with(
 
 ```
 ```{r, eval=FALSE}
-
-
 #Step 3: Calculate the indicator: 
 RA_caregiver <- RA_caregiver %>%
   mutate(
@@ -1744,8 +1742,10 @@ RA_caregiver <- RA_caregiver %>%
       zlen < -2 ~ 1, 
       zlen > -2 ~ 0,
       TRUE ~ NA_real_  ))
+```
 
 
+```{r, eval=FALSE}
 FDS_PAK_2024_RA_caregiver <- RA_caregiver %>%
   as_survey_design(
     strata = samp_strat,           # Specify the column with cluster IDs
@@ -1754,8 +1754,6 @@ FDS_PAK_2024_RA_caregiver <- RA_caregiver %>%
   )
 ```
 ```{r, eval=FALSE}
-
-
 
 stunting_prevalence <- FDS_PAK_2024_RA_caregiver %>%
   group_by(Intro_07) %>%
@@ -1781,8 +1779,8 @@ cat("Host Community:", stunting_host, "%\n")
 ##Add weights when/if available
 FDS_PAK_2024_RA_caregiver <- RA_caregiver %>%
   as_survey_design(
-    strata = samp_strat ,           # Specify the column with cluster strata
-    weights = wgh_samp_pop_restr_u5, # Specify the column with survey weights
+    strata = NULL ,           # Specify the column with cluster strata
+    weights = NULL, # Specify the column with survey weights
     nest = TRUE              # Use TRUE if PSUs are nested within clusters (optional, based on your survey design)
   )
 ```
@@ -1901,38 +1899,37 @@ For the calculation of this indicator we will use the [anthro](https://cran.r-pr
 4.[Child growth standard](https://www.who.int/tools/child-growth-standards)
 5.[Anthro package github](https://github.com/worldhealthorganization/anthro)
 
-```{r, eval=FALSE}
+```{r}
+#IMPORTANT: If you are calculating this indicator individually from SDG 2.2.1 (meaning you did not run the script for the indicator 2.2.1), run STEP 1 and STEP 2 below. If you have already run the script for the indicator 2.2.1, start with step 3! 
+
 #Step 1: Install and load the anthro package - This is the package needed for facilitating the calculations 
-install.packages("anthro")
-remotes::install_github("worldhealthorganization/anthro")
-library(anthro)
+# install.packages("anthro")
+# remotes::install_github("worldhealthorganization/anthro")
+# library(anthro)
+# 
+# #Step 2: Calculate z-scores
+# RA_caregiver <- RA_caregiver %>%
+#   bind_cols(
+# with(
+#   RA_caregiver,
+#   anthro_zscores(
+#     sex = childnametouseSEX, # Column indicating child sex
+#     age = childnametouseAGE, # Column indicating child age
+#     weight = AN6,  # Column indicating weight measurement
+#     lenhei = AN7,  # Column indicating height/length measurement
+#     measure = AN8, # Column indicating measurement type
+#     is_age_in_month = TRUE      # Specify that age is in months
+#   )
+# ))
 ```
 
-```{r, eval=FALSE}
-#Step 2: Calculate z-scores
-    
-RA_caregiver <- RA_caregiver %>%
-  bind_cols(
-with(
-  RA_caregiver,
-  anthro_zscores(
-    sex = childnametouseSEX, # Column indicating child sex
-    age = childnametouseAGE, # Column indicating child age
-    weight = AN6,  # Column indicating weight measurement
-    lenhei = AN7,  # Column indicating height/length measurement
-    measure = AN8, # Column indicating measurement type
-    is_age_in_month = TRUE      # Specify that age is in months
-  )
-))
-
-```
 ```{r, eval=FALSE}
 #Step 3: Calculate the tracer for wasting: 
 RA_caregiver <- RA_caregiver %>%
   mutate(
     C020202b = case_when(
-      zwfl...182 < -2 ~ 1, 
-      zwfl...182 > -2 ~ 0,
+      zwfl < -2 ~ 1, 
+      zwfl > -2 ~ 0,
       TRUE ~ NA_real_  ))
       
 ```
@@ -1947,8 +1944,8 @@ cat("Prevalence of wasting: ", wasting_prevalence$prevalence, "%\n")
 RA_caregiver <- RA_caregiver %>%
   mutate(
     C020202a = case_when(
-      zwfl...182 > 2 ~ 1, 
-      zwfl...182 < 2 ~ 0,
+      zwfl > 2 ~ 1, 
+      zwfl < 2 ~ 0,
       TRUE ~ NA_real_  ))
       
 ```
