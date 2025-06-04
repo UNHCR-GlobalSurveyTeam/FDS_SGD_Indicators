@@ -5373,14 +5373,17 @@ table(RA_adult$EMP10_6a) #Would you get paid  [maternity/paternity] leave [if yo
 #Step 1: Determine who is employed based on various conditions 
 RA_adult <- RA_adult %>%
   mutate(employed = case_when(
-    EMP01 == 1 ~ 1,  # Paid employment - employees
-    (EMP02 == 1 & EMP06b == 3)  ~ 1,  # Self-employment
-    (EMP03 == 1 & EMP06b == 3)  ~ 1,  # Unpaid contributing family workers
+    EMP01 == 1  ~ 1,  # Paid employment - employees
+    EMP02 == 1 & EMP06b == 3 ~ 1,  # Self-employment
+    EMP03 == 1 & EMP06b == 3 ~ 1,  # Unpaid contributing family workers
     EMP04 == 1  ~ 1,  # Absent but still employed
-    (EMP05 == 1 & EMP06a == 3)  ~ 1,  # Absent but self-employed
-    (EMP02 == 1 & EMP06b %in% c(1, 2) & EMP06c %in% c(1, 2))  ~ 1,  # Farming/rearing/fishing for sale
-    (EMP05 == 1 & EMP06a %in% c(1, 2) & EMP06c %in% c(1, 2))  ~ 1,  # Absent but farming for sale
-    TRUE ~ 0
+    EMP05 == 1 & EMP06a == 3~ 1,  # Absent 
+    EMP05 == 1 & EMP06b == 3~ 1,  # Absent self-employed
+    EMP02 == 1 & EMP06b %in% c(1, 2) & EMP06c %in% c(1, 2) ~ 1,  # Farming/rearing/fishing for sale
+    EMP03 == 1 & EMP06b %in% c(1, 2) & EMP06c %in% c(1, 2) ~ 1,  # ADDED: FAMILY farming/rearing/fishing for sale
+    EMP05 %in% c(1, 2) & EMP06b %in% c(1, 2) & EMP06c %in% c(1, 2) ~ 1,  # Temporarily absent but farming for sale
+    EMP05 %in% c(1, 2) & EMP06a %in% c(1, 2) & EMP06b %in% c(1, 2) ~ 1,  # 
+    TRUE ~ 0  # Not employed
   ))
 ```
 
